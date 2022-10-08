@@ -137,7 +137,8 @@ class Curl
 	 * 恢复Curl静态类
 	 * @access private
 	 */
-	private static function recovery() {
+	private static function recovery()
+	{
 		self::$ch = curl_init();
 		self::$requset_config = [
 			'header' => [
