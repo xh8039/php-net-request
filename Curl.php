@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @package Curl
+ * @author  易航
+ * @version 1.0.0
+ * @link    https://gitee.com/yh_IT/php_curl
+ *
+**/
+
 class Curl
 {
 	private static $ch;
@@ -30,11 +38,11 @@ class Curl
 	 * @access public
 	 * @return array
 	 */
-	public static $requset_content = [];
+	public static $response = [];
 
 	private static function init()
 	{
-		self::$ch = curl_init();
+		// self::$ch = curl_init();
 		curl_setopt(self::$ch, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt(self::$ch, CURLOPT_SSL_VERIFYHOST, false);
 		curl_setopt(self::$ch, CURLOPT_ENCODING, "gzip");
@@ -48,14 +56,46 @@ class Curl
 	/**
 	 * 配置请求参数
 	 * @access public
-	 * @param array $config 要配置的数组请求参数
+	 * @param array $config 要配置的CURL请求参数
 	 * @return self
 	 */
-	public static function requestConfig($config)
+	public static function config($config)
 	{
 		foreach ($config as $key => $value) {
 			if (!empty($value)) {
 				self::$requset_config[$key] = $value;
+			}
+		}
+		return self::class;
+	}
+
+	/**
+	 * 配置请求头部参数
+	 * @access public
+	 * @param array $config 要配置的请求头部参数
+	 * @return self
+	 */
+	public static function header($config)
+	{
+		foreach ($config as $key => $value) {
+			if (!empty($value)) {
+				self::$requset_config['header'][$key] = $value;
+			}
+		}
+		return self::class;
+	}
+
+	/**
+	 * 配置请求参数
+	 * @access public
+	 * @param array $config 要配置的请求体参数
+	 * @return self
+	 */
+	public static function param($config)
+	{
+		foreach ($config as $key => $value) {
+			if (!empty($value)) {
+				self::$requset_config['param'][$key] = $value;
 			}
 		}
 		return self::class;
@@ -69,6 +109,7 @@ class Curl
 	 */
 	public static function get($url)
 	{
+		self::$ch = curl_init();
 		if (self::$requset_config['param']) {
 			self::$requset_config['param'] = http_build_query(self::$requset_config['param']);
 			$url = strstr($url, '?') ? trim($url, '&') . '&' .  self::$requset_config['param'] : $url . '?' .  self::$requset_config['param'];
@@ -84,6 +125,7 @@ class Curl
 	 */
 	public static function post($url)
 	{
+		self::$ch = curl_init();
 		curl_setopt(self::$ch, CURLOPT_POST, 1);
 		self::$requset_config['param'] ? curl_setopt(self::$ch, CURLOPT_POSTFIELDS, self::$requset_config['param']) : null;
 		return self::request($url);
@@ -128,7 +170,7 @@ class Curl
 			'body' => $body, 'header' => $headers, 'code' => curl_getinfo(self::$ch, CURLINFO_HTTP_CODE),
 		];
 		curl_close(self::$ch);
-		self::$requset_content = $results;
+		self::$response = $results;
 		self::recovery();
 		return $results['body'];
 	}
