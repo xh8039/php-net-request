@@ -166,13 +166,13 @@ class Curl
 			$header_array
 		];
 		$body = substr($response_body, $header_size);
-		$results = [
+		$response = [
 			'body' => $body, 'header' => $headers, 'code' => curl_getinfo(self::$ch, CURLINFO_HTTP_CODE),
 		];
 		curl_close(self::$ch);
-		self::$response = $results;
+		self::$response = $response;
 		self::recovery();
-		return $results['body'];
+		return $response['body'];
 	}
 
 	/**
@@ -185,9 +185,9 @@ class Curl
 		self::$requset_config = [
 			'header' => [
 				'Accept: */*',
-				'Accept-Encoding: gzip,deflate,sdch',
+				'Accept-Encoding: gzip,deflate,br,sdch',
 				'Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6',
-				'Connection:close',
+				'Connection: no-cache',
 				'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36 Edg/104.0.1293.70'
 			],
 			'param' => null,
