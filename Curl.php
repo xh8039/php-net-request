@@ -25,7 +25,7 @@ class Curl
 			'Connection:close',
 			'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36 Edg/104.0.1293.70'
 		],
-		'param' => null,
+		'param' => [],
 		'cookie' => null,
 		// 连接时间
 		'connect_time' => 30,
@@ -127,7 +127,8 @@ class Curl
 	{
 		self::$ch = curl_init();
 		curl_setopt(self::$ch, CURLOPT_POST, 1);
-		self::$requset_config['param'] ? curl_setopt(self::$ch, CURLOPT_POSTFIELDS, self::$requset_config['param']) : null;
+		// curl_setopt(self::$ch, CURLOPT_POSTFIELDS, self::$requset_config['param'] ? self::$requset_config['param'] : []);
+		curl_setopt(self::$ch, CURLOPT_POSTFIELDS, self::$requset_config['param']);
 		return self::request($url);
 	}
 
