@@ -6,7 +6,7 @@
  * @version 1.0.0
  * @link    https://gitee.com/yh_IT/php_curl
  *
-**/
+ **/
 
 class Curl
 {
@@ -174,6 +174,19 @@ class Curl
 		self::$response = $response;
 		self::recovery();
 		return $response['body'];
+	}
+
+	/**
+	 * 将获取到的JSON数据转换为PHP数组
+	 * @access public
+	 */
+	public static function toArray()
+	{
+		$array = json_decode(self::$response['body'], true);
+		if (is_array($array)) {
+			return $array;
+		}
+		return self::$response['body'];
 	}
 
 	/**
