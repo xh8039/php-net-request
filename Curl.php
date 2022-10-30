@@ -42,7 +42,6 @@ class Curl
 
 	private static function init()
 	{
-		// self::$ch = curl_init();
 		curl_setopt(self::$ch, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt(self::$ch, CURLOPT_SSL_VERIFYHOST, false);
 		curl_setopt(self::$ch, CURLOPT_ENCODING, "gzip");
@@ -59,7 +58,7 @@ class Curl
 	 * @param array $config 要配置的CURL请求参数
 	 * @return self
 	 */
-	public static function config($config)
+	public static function set($config)
 	{
 		foreach ($config as $key => $value) {
 			if (!empty($value)) {
@@ -127,7 +126,6 @@ class Curl
 	{
 		self::$ch = curl_init();
 		curl_setopt(self::$ch, CURLOPT_POST, 1);
-		// curl_setopt(self::$ch, CURLOPT_POSTFIELDS, self::$requset_config['param'] ? self::$requset_config['param'] : []);
 		curl_setopt(self::$ch, CURLOPT_POSTFIELDS, self::$requset_config['param']);
 		return self::request($url);
 	}
@@ -195,16 +193,15 @@ class Curl
 	 */
 	private static function recovery()
 	{
-		self::$ch = curl_init();
 		self::$requset_config = [
 			'header' => [
 				'Accept: */*',
-				'Accept-Encoding: gzip,deflate,br,sdch',
+				'Accept-Encoding: gzip,deflate,sdch',
 				'Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6',
-				'Connection: no-cache',
+				'Connection:close',
 				'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36 Edg/104.0.1293.70'
 			],
-			'param' => null,
+			'param' => [],
 			'cookie' => null,
 			// 连接时间
 			'connect_time' => 30,
