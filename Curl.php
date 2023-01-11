@@ -8,6 +8,8 @@
  *
  **/
 
+namespace request;
+
 class Curl
 {
 	private $ch;
