@@ -30,9 +30,9 @@ class Curl
 			'params' => [],
 			'cookie' => null,
 			// 连接时间
-			'connect_time' => 10,
+			'connect_time' => 5,
 			// 读取时间
-			'read_time' => null
+			'read_time' => 10
 		]
 	];
 
@@ -191,7 +191,7 @@ class response
 	 */
 	public function code()
 	{
-		return $this->response['code'];
+		return trim($this->response['code']);
 	}
 
 	/**
