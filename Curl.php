@@ -3,34 +3,35 @@
 /**
  * @package Curl
  * @author  易航
- * @version 1.0.0
+ * @version 2.0
  * @link    https://gitee.com/yh_IT/php_curl
  *
  **/
 
 class Curl
 {
-	private static $ch;
+	private $ch;
 
 	/**
-	 * 请求配置
-	 * @access public
+	 * 配置信息
 	 * @return array
 	 */
-	private static $requset_config = [
-		'header' => [
-			'Accept: */*',
-			'Accept-Encoding: gzip,deflate,sdch',
-			'Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6',
-			'Connection:close',
-			'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36 Edg/104.0.1293.70'
-		],
-		'param' => [],
-		'cookie' => null,
-		// 连接时间
-		'connect_time' => 30,
-		// 读取时间
-		'read_time' => null
+	private $options = [
+		'request' => [
+			'headers' => [
+				'Accept: */*',
+				'Accept-Encoding: gzip,deflate,sdch',
+				'Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6',
+				'Connection: close',
+				'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36 Edg/104.0.1293.70'
+			],
+			'params' => [],
+			'cookie' => null,
+			// 连接时间
+			'connect_time' => 10,
+			// 读取时间
+			'read_time' => null
+		]
 	];
 
 	/**
@@ -38,175 +39,216 @@ class Curl
 	 * @access public
 	 * @return array
 	 */
-	public static $response = [];
+	public $response = [];
 
-	private static function init()
+	private function init()
 	{
-		curl_setopt(self::$ch, CURLOPT_SSL_VERIFYPEER, false);
-		curl_setopt(self::$ch, CURLOPT_SSL_VERIFYHOST, false);
-		curl_setopt(self::$ch, CURLOPT_ENCODING, "gzip");
-		curl_setopt(self::$ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt(self::$ch, CURLOPT_HEADER, 1);
-		curl_setopt(self::$ch, CURLOPT_HTTPHEADER, self::$requset_config['header']);  // 请求头
-		curl_setopt(self::$ch, CURLOPT_CONNECTTIMEOUT, self::$requset_config['connect_time']);  // 请求时间
-		curl_setopt(self::$ch, CURLOPT_TIMEOUT, self::$requset_config['read_time']); // 读取时间
+		curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, false);
+		curl_setopt($this->ch, CURLOPT_ENCODING, "gzip");
+		curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($this->ch, CURLOPT_HEADER, 1);
+		curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->options['request']['headers']);  // 请求头
+		curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, $this->options['request']['connect_time']);  // 请求时间
+		curl_setopt($this->ch, CURLOPT_TIMEOUT, $this->options['request']['read_time']); // 读取时间
 	}
 
 	/**
 	 * 配置请求参数
 	 * @access public
-	 * @param array $config 要配置的CURL请求参数
-	 * @return self
+	 * @param array $options 要配置的CURL请求参数
+	 * @return $this
 	 */
-	public static function set($config)
+	public function request($options)
 	{
-		foreach ($config as $key => $value) {
-			if (!empty($value)) {
-				self::$requset_config[$key] = $value;
-			}
-		}
-		return self::class;
+		$this->options['request'] = array_merge($this->options['request'], $options);
+		return $this;
 	}
 
 	/**
 	 * 配置请求头部参数
 	 * @access public
-	 * @param array $config 要配置的请求头部参数
-	 * @return self
+	 * @param array $headers 要配置的请求头部参数
+	 * @return $this
 	 */
-	public static function header($config)
+	public function headers($headers)
 	{
-		foreach ($config as $key => $value) {
-			if (!empty($value)) {
-				self::$requset_config['header'][$key] = $value;
-			}
-		}
-		return self::class;
+		$this->options['request']['headers'] = array_merge($this->options['request']['headers'], $headers);
+		return $this;
 	}
 
 	/**
 	 * 配置请求参数
 	 * @access public
-	 * @param array $config 要配置的请求体参数
-	 * @return self
+	 * @param array $params 要配置的请求体参数
+	 * @return $this
 	 */
-	public static function param($config)
+	public function params($params)
 	{
-		foreach ($config as $key => $value) {
-			if (!empty($value)) {
-				self::$requset_config['param'][$key] = $value;
-			}
-		}
-		return self::class;
+		$this->options['request']['params'] = array_merge($this->options['request']['headers'], $params);
+		return $this;
+	}
+
+	/**
+	 * 配置请求参数
+	 * @access public
+	 * @param $name 参数名
+	 * @param $value 参数值
+	 * @return $this
+	 */
+	public function param($name, $value)
+	{
+		$this->options['request']['params'][$name] = $value;
+		return $this;
 	}
 
 	/**
 	 * GET请求
 	 * @access public
 	 * @param string $url 请求URL
-	 * @return string
+	 * @return response
 	 */
-	public static function get($url)
+	public function get($url)
 	{
-		self::$ch = curl_init();
-		if (self::$requset_config['param']) {
-			self::$requset_config['param'] = http_build_query(self::$requset_config['param']);
-			$url = strstr($url, '?') ? trim($url, '&') . '&' .  self::$requset_config['param'] : $url . '?' .  self::$requset_config['param'];
+		$this->ch = curl_init();
+		if ($this->options['request']['params']) {
+			$this->options['request']['params'] = http_build_query($this->options['request']['params']);
+			$url = strstr($url, '?') ? trim($url, '&') . '&' .  $this->options['request']['params'] : $url . '?' .  $this->options['request']['params'];
 		}
-		return self::request($url);
+		return $this->sendRequest($url);
 	}
 
 	/**
 	 * POST请求
 	 * @access public
 	 * @param string $url 请求URL
-	 * @return string
+	 * @return response
 	 */
-	public static function post($url)
+	public function post($url)
 	{
-		self::$ch = curl_init();
-		curl_setopt(self::$ch, CURLOPT_POST, 1);
-		curl_setopt(self::$ch, CURLOPT_POSTFIELDS, self::$requset_config['param']);
-		return self::request($url);
+		$this->ch = curl_init();
+		curl_setopt($this->ch, CURLOPT_POST, 1);
+		curl_setopt($this->ch, CURLOPT_POSTFIELDS, $this->options['request']['params']);
+		return $this->sendRequest($url);
 	}
 
 	/**
 	 * 处理请求
 	 * @access private
 	 * @param string $url 请求URL
-	 * @return string
+	 * @return response
 	 */
-	private static function request($url)
+	private function sendRequest($url)
 	{
-		self::init();
-		curl_setopt(self::$ch, CURLOPT_URL, $url);
-		$response_body = curl_exec(self::$ch);
-		$header_size = curl_getinfo(self::$ch, CURLINFO_HEADER_SIZE);
+		$this->init();
+		curl_setopt($this->ch, CURLOPT_URL, $url);
+		$response_body = curl_exec($this->ch);
+		$http_code = curl_getinfo($this->ch, CURLINFO_HTTP_CODE);
+		$header_size = curl_getinfo($this->ch, CURLINFO_HEADER_SIZE);
+		curl_close($this->ch);
 		$header = substr($response_body, 0, $header_size);
-		$header_explode = explode(PHP_EOL, $header);
-		$header_explodes = [];
-		$header_array = [];
-		foreach ($header_explode as $value) {
-			if ((empty($value) && ($value != 0)) || (empty(strlen($value)))) {
-				continue;
-			}
-			$value = trim($value);
-			$header_explodes[] = $value;
-			if (strpos($value, ':')) {
-				preg_match('/(.*):(.*)/ims', $value, $header_text);
-				$header_array[trim($header_text[1])] = trim($header_text[2]);
-			} else {
-				$header_array[] = $value;
-			}
-		}
-		$headers = [
-			$header,
-			$header_explodes,
-			$header_array
-		];
+		$headers = explode(PHP_EOL, $header);
+		// 过滤数组值两边的空格
+		$headers = array_filter($headers, 'trim');
+		// 过滤数组中的空值
+		$headers = array_filter($headers);
 		$body = substr($response_body, $header_size);
 		$response = [
-			'body' => $body, 'header' => $headers, 'code' => curl_getinfo(self::$ch, CURLINFO_HTTP_CODE),
+			'body' => $body,
+			'header' => $header,
+			'headers' => $headers,
+			'code' => $http_code
 		];
-		curl_close(self::$ch);
-		self::$response = $response;
-		self::recovery();
-		return $response['body'];
+		return new response($response);
+	}
+}
+
+class response
+{
+	private $response;
+
+	private $headers = null;
+
+	public function __construct($response)
+	{
+		$this->response = $response;
+	}
+
+	/**
+	 * 直接获取响应体内容
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return $this->response['body'];
+	}
+
+	/**
+	 * 获取响应状态码
+	 * @return integer
+	 */
+	public function code()
+	{
+		return $this->response['code'];
+	}
+
+	/**
+	 * 获取指定响应头信息
+	 * @access public
+	 * @param $name 响应头名称
+	 * @return string
+	 */
+	public function header($name)
+	{
+		$headers = $this->headers();
+		$name = strtolower(trim($name));
+		return isset($headers[$name]) ? $headers[$name] : null;
+	}
+
+	/**
+	 * 获取数组形式的所有响应头信息
+	 * @return array
+	 */
+	public function headers()
+	{
+		if (is_null($this->headers)) {
+			$this->headers = $this->explodeHeaders($this->response['headers']);
+		}
+		return $this->headers;
 	}
 
 	/**
 	 * 将获取到的JSON数据转换为PHP数组
 	 * @access public
+	 * @return array
 	 */
-	public static function toArray()
+	public function toArray()
 	{
-		$array = json_decode(self::$response['body'], true);
-		if (is_array($array)) {
-			return $array;
-		}
-		return self::$response['body'];
+		return json_decode($this->response['body'], true);
 	}
 
 	/**
-	 * 恢复Curl静态类
-	 * @access private
+	 * 将获取到的JSON数据转换为PHP对象
+	 * @access public
+	 * @return object
 	 */
-	private static function recovery()
+	public function toObject()
 	{
-		self::$requset_config = [
-			'header' => [
-				'Accept: */*',
-				'Accept-Encoding: gzip,deflate,sdch',
-				'Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6',
-				'Connection:close',
-				'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36 Edg/104.0.1293.70'
-			],
-			'param' => [],
-			'cookie' => null,
-			// 连接时间
-			'connect_time' => 30,
-			// 读取时间
-			'read_time' => null
-		];
+		return json_decode($this->response['body']);
+	}
+
+	private function explodeHeaders(array $headers)
+	{
+		$headers_array = [];
+		$headers[] = 'data : :aa:bb: ';
+		foreach ($headers as $value) {
+			if (strpos($value, ':')) {
+				$value = explode(':', $value, 2);
+				$headers_array[strtolower(trim($value[0]))] = trim($value[1]);
+			} else {
+				$headers_array[] = $value;
+			}
+		}
+		return $headers_array;
 	}
 }
