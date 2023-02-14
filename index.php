@@ -1,7 +1,7 @@
 <?php
 include 'Curl.php';
 $url = 'http://blog.bri6.cn';
-$response = (new Curl)->get($url);
+$response = (new request\Curl)->get($url);
 
 // 获取响应头状态码
 $response->code();

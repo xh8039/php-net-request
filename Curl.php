@@ -21,11 +21,10 @@ class Curl
 	private $options = [
 		'request' => [
 			'headers' => [
-				'Accept: */*',
-				'Accept-Encoding: gzip,deflate,sdch',
-				'Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6',
-				'Connection: close',
-				'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36 Edg/104.0.1293.70'
+				'Accept' => '*/*',
+				'Accept-Language' => 'zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6',
+				'Connection' => 'close',
+				'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36 Edg/104.0.1293.70'
 			],
 			'params' => [],
 			'cookie' => null,
@@ -45,14 +44,22 @@ class Curl
 
 	private function init()
 	{
+		$headers = [];
+		foreach ($this->options['request']['headers'] as $key => $value) {
+			if (is_numeric($key)) {
+				$headers[] = $value;
+			} else {
+				$headers[] = $key . ': ' . $value;
+			}
+		}
 		curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, false);
 		curl_setopt($this->ch, CURLOPT_ENCODING, "gzip");
 		curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($this->ch, CURLOPT_HEADER, 1);
-		curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->options['request']['headers']);  // 请求头
-		curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, $this->options['request']['connect_time']);  // 请求时间
-		curl_setopt($this->ch, CURLOPT_TIMEOUT, $this->options['request']['read_time']); // 读取时间
+		curl_setopt($this->ch, CURLOPT_HTTPHEADER, $headers);  // 请求头
+		curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, $this->options['request']['connect_time']);  // 连接时间
+		curl_setopt($this->ch, CURLOPT_TIMEOUT, $this->options['request']['read_time']); // 请求时间
 	}
 
 	/**
@@ -87,7 +94,7 @@ class Curl
 	 */
 	public function params($params)
 	{
-		$this->options['request']['params'] = array_merge($this->options['request']['headers'], $params);
+		$this->options['request']['params'] = array_merge($this->options['request']['params'], $params);
 		return $this;
 	}
 
@@ -151,7 +158,7 @@ class Curl
 		$header = substr($response_body, 0, $header_size);
 		$headers = explode(PHP_EOL, $header);
 		// 过滤数组值两边的空格
-		$headers = array_filter($headers, 'trim');
+		$headers = array_map('trim', $headers);
 		// 过滤数组中的空值
 		$headers = array_filter($headers);
 		$body = substr($response_body, $header_size);
@@ -183,6 +190,15 @@ class response
 	public function __toString()
 	{
 		return $this->response['body'];
+	}
+
+	/**
+	 * 直接获取响应体内容
+	 * @return string
+	 */
+	public function body()
+	{
+		return $this->__toString();
 	}
 
 	/**
