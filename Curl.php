@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @package Curl
+ * @package request\Curl
  * @author  易航
- * @version 2.0
+ * @version 2.1
  * @link    https://gitee.com/yh_IT/php_curl
  *
  **/
@@ -26,8 +26,9 @@ class Curl
 				'Connection' => 'close',
 				'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36 Edg/104.0.1293.70'
 			],
-			'params' => [],
-			'cookie' => null,
+			'params' => []
+		],
+		'options' => [
 			// 连接时间
 			'connect_time' => 3,
 			// 读取时间
@@ -42,15 +43,19 @@ class Curl
 	 */
 	public $response = [];
 
+	public function __construct($options = [])
+	{
+		if ((!empty($options)) && is_array($options)) {
+			$this->options['options'] = array_merge($this->options['options'], $options);
+		}
+		return $this;
+	}
+
 	private function init()
 	{
 		$headers = [];
 		foreach ($this->options['request']['headers'] as $key => $value) {
-			if (is_numeric($key)) {
-				$headers[] = $value;
-			} else {
-				$headers[] = $key . ': ' . $value;
-			}
+			$headers[] = is_numeric($key) ? $value : $key . ': ' . $value;
 		}
 		curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, false);
@@ -58,20 +63,8 @@ class Curl
 		curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($this->ch, CURLOPT_HEADER, 1);
 		curl_setopt($this->ch, CURLOPT_HTTPHEADER, $headers);  // 请求头
-		curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, $this->options['request']['connect_time']);  // 连接时间
-		curl_setopt($this->ch, CURLOPT_TIMEOUT, $this->options['request']['read_time']); // 请求时间
-	}
-
-	/**
-	 * 配置请求参数
-	 * @access public
-	 * @param array $options 要配置的CURL请求参数
-	 * @return $this
-	 */
-	public function request($options)
-	{
-		$this->options['request'] = array_merge($this->options['request'], $options);
-		return $this;
+		curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, $this->options['options']['connect_time']);  // 连接时间
+		curl_setopt($this->ch, CURLOPT_TIMEOUT, $this->options['options']['read_time']); // 请求时间
 	}
 
 	/**
@@ -80,21 +73,13 @@ class Curl
 	 * @param array $headers 要配置的请求头部参数
 	 * @return $this
 	 */
-	public function headers($headers)
+	public function header($name, $value = false)
 	{
-		$this->options['request']['headers'] = array_merge($this->options['request']['headers'], $headers);
-		return $this;
-	}
-
-	/**
-	 * 配置请求参数
-	 * @access public
-	 * @param array $params 要配置的请求体参数
-	 * @return $this
-	 */
-	public function params($params)
-	{
-		$this->options['request']['params'] = array_merge($this->options['request']['params'], $params);
+		if (is_array($name)) {
+			$this->options['request']['headers'] = array_merge($this->options['request']['headers'], $name);
+		} else {
+			$this->options['request']['headers'][$name] = $value;
+		}
 		return $this;
 	}
 
@@ -105,10 +90,19 @@ class Curl
 	 * @param $value 参数值
 	 * @return $this
 	 */
-	public function param($name, $value)
+	public function param($name, $value = false)
 	{
-		$this->options['request']['params'][$name] = $value;
+		if (is_array($name)) {
+			$this->options['request']['params'] = array_merge($this->options['request']['params'], $name);
+		} else {
+			$this->options['request']['params'][$name] = $value;
+		}
 		return $this;
+	}
+
+	public function cookie($value)
+	{
+		return $this->header('cookie', $value);
 	}
 
 	/**
@@ -117,8 +111,9 @@ class Curl
 	 * @param string $url 请求URL
 	 * @return response
 	 */
-	public function get($url)
+	public function get($url, $params = false)
 	{
+		if (is_array($params)) $this->param($params);
 		$this->ch = curl_init();
 		if ($this->options['request']['params']) {
 			$this->options['request']['params'] = http_build_query($this->options['request']['params']);
@@ -133,8 +128,9 @@ class Curl
 	 * @param string $url 请求URL
 	 * @return response
 	 */
-	public function post($url)
+	public function post($url, $params = false)
 	{
+		if (is_array($params)) $this->param($params);
 		$this->ch = curl_init();
 		curl_setopt($this->ch, CURLOPT_POST, 1);
 		curl_setopt($this->ch, CURLOPT_POSTFIELDS, $this->options['request']['params']);
