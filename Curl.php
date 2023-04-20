@@ -53,9 +53,20 @@ class Curl
 
 	private function init()
 	{
+		$headers_array = [];
+		foreach ($this->options['request']['headers'] as $name => $value) {
+			if (is_numeric($name)) {
+				$content = explode(':', $value, 2);
+				$name = $content[0];
+				$value = $content[1];
+			}
+			$name = strtolower(trim($name));
+			$value = trim($value);
+			$headers_array[$name] = $value;
+		}
 		$headers = [];
-		foreach ($this->options['request']['headers'] as $key => $value) {
-			$headers[] = is_numeric($key) ? $value : $key . ': ' . $value;
+		foreach ($headers_array as $name => $value) {
+			$headers[] = $name . ': ' . $value;
 		}
 		curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, false);
@@ -164,6 +175,6 @@ class Curl
 			'headers' => $headers,
 			'code' => $http_code
 		];
-		return new response($response);
+		return new Response($response);
 	}
 }

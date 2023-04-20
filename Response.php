@@ -2,7 +2,7 @@
 
 namespace request;
 
-class response
+class Response
 {
     private $response;
 
