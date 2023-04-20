@@ -19,7 +19,7 @@ class response
      */
     public function __toString()
     {
-        return $this->response['body'];
+        return $this->body();
     }
 
     /**
@@ -28,7 +28,7 @@ class response
      */
     public function body()
     {
-        return $this->__toString();
+        return $this->response['body'];
     }
 
     /**
@@ -86,7 +86,7 @@ class response
      */
     public function toObject()
     {
-        $object = json_decode($this->response['body'], true);
+        $object = json_decode($this->response['body']);
         if (is_object($object)) {
             return $object;
         }
@@ -96,7 +96,7 @@ class response
     private function explodeHeaders(array $headers)
     {
         $headers_array = [];
-        $headers[] = 'data : :aa:bb: ';
+        // $headers[] = 'data : :aa:bb: ';
         foreach ($headers as $value) {
             if (strpos($value, ':')) {
                 $value = explode(':', $value, 2);
