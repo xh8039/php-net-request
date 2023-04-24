@@ -1,16 +1,8 @@
 <?php
 
-/**
- * @package network\http
- * @author  易航
- * @version 2.2
- * @link    https://gitee.com/yh-it/php-network-request
- *
- **/
+namespace network\http;
 
-namespace request\http\request;
-
-trait Controller
+trait Request
 {
 
 	private $ch;
@@ -148,6 +140,6 @@ trait Controller
 			'headers' => $headers,
 			'code' => $http_code
 		];
-		return new \network\http\Response($response);
+		return new Response($response);
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace request\http;
+namespace network\http;
 
 class Response
 {

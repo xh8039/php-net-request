@@ -1,16 +1,9 @@
 <?php
 
-
-require __DIR__ . '/http/request/Options.php';
-require __DIR__ .  '/http/request/Method.php';
-require __DIR__ .  '/http/Request.php';
-require __DIR__ .  '/http/Get.php';
-require __DIR__ .  '/http/Post.php';
-require __DIR__ .  '/http/Response.php';
-require __DIR__ .  '/http/functions.php';
+require __DIR__ . '/vendor/autoload.php';
 
 $url = 'http://www.bri6.cn';
-$get = \network\http\get($url);
+$get = network\request\http\get($url);
 echo($get);
 exit;
 

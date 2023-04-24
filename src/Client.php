@@ -1,18 +1,11 @@
 <?php
 
-/**
- * @package network\http
- * @author  易航
- * @version 2.2
- * @link    https://gitee.com/yh-it/php-network-request
- *
- **/
+namespace network\http;
 
-namespace request\http\request;
-
-class Method
+class Client
 {
-	use Controller;
+
+	use Request;
 
 	/**
 	 * GET请求

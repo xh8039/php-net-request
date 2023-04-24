@@ -1,12 +1,12 @@
 <?php
 
-namespace request\http;
+namespace network\http;
 
-class Post extends Client
+class Get extends Client
 {
 
 	/**
-	 * POST请求初始化
+	 * GET请求初始化
 	 * @access public
 	 * @param array $options 配置信息
 	 */
@@ -16,7 +16,7 @@ class Post extends Client
 	}
 
 	/**
-	 * 发送POST请求
+	 * 发送GET请求
 	 * @access public
 	 * @param string $url 请求URL
 	 * @param array|false $params 携带的数组参数
@@ -24,6 +24,6 @@ class Post extends Client
 	 */
 	public function send($url, $params = false)
 	{
-		return $this->post($url, $params);
+		return $this->get($url, $params);
 	}
 }

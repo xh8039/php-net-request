@@ -1,6 +1,6 @@
 {
-	"name": "network/request",
-	"description": "一款PHP网络请求库",
+	"name": "network/http",
+	"description": "一款基于PHP的HTTP网络请求库",
 	"type": "library",
 	"require": {
         "php": ">=7.4"
@@ -8,10 +8,10 @@
 	"license": "Apache-2.0",
 	"autoload": {
 		"psr-4": {
-			"request\\": "src/"	
+			"network\\http\\": "src/"	
 		},
 		"files": [
-			"src/functions.php"
+			"src/helper.php"
 		]
 	},
 	"authors": [

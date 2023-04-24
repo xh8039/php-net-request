@@ -7,18 +7,18 @@ namespace Composer\Autoload;
 class ComposerStaticInit8d085f1b842775d9b746f229fdfd4a34
 {
     public static $files = array (
-        'c805898e2ef6ddd14b022fda853ceb92' => __DIR__ . '/../..' . '/src/functions.php',
+        '3f25217b295bb6ca58df2f221ad22d51' => __DIR__ . '/../..' . '/src/helper.php',
     );
 
     public static $prefixLengthsPsr4 = array (
-        'r' => 
+        'n' => 
         array (
-            'request\\' => 8,
+            'network\\http\\' => 13,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'request\\' => 
+        'network\\http\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),
