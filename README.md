@@ -2,11 +2,32 @@
 
 ## 安装
 
-使用Composer安装:
+### 通过Composer安装
+
+使用Composer安装网络请求库:
 
 ```shell
 composer require network/http
 ```
+
+此命令将自动下载网络请求库并安装到您的项目中。
+
+### 通过自动加载使用
+
+要使用网络请求库,还需要在代码中引入Composer的自动加载功能:
+
+```php
+require 'vendor/autoload.php';
+```
+
+该文件位于您的项目根目录下。只需要在第一次使用网络请求库的PHP文件中引入此文件,即可启用Composer自动加载。
+之后,您就可以直接使用网络请求库了:
+
+```php
+$client = new network\http\Client();
+```
+
+无需再手动引入准备好的库文件。Composer自动加载会根据used时自动加载所需要的代码。
 
 ## 基本使用
 
