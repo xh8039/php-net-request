@@ -6,9 +6,9 @@ class Get extends Client
 {
 
 	/**
-	 * GET请求初始化
-	 * @access public
-	 * @param array $options 配置信息
+	 * 构造函数,初始化GET请求  
+	 * 
+	 * @param array $options 请求配置
 	 */
 	public function __construct($options = [])
 	{
@@ -17,13 +17,15 @@ class Get extends Client
 
 	/**
 	 * 发送GET请求
-	 * @access public
+	 *  
 	 * @param string $url 请求URL
-	 * @param array|false $params 携带的数组参数
-	 * @return response
+	 * @param array|false $params 请求参数,为空时为false
+	 * @param array $headers 自定义请求头
+	 * @return Response 响应对象 
 	 */
-	public function send($url, $params = false)
+	public function send($url, $params = false, $headers = [])
 	{
+		$this->header($headers);
 		return $this->get($url, $params);
 	}
 }

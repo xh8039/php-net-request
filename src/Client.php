@@ -8,11 +8,11 @@ class Client
 	use Request;
 
 	/**
-	 * GET请求
-	 * @access public
-	 * @param string $url 请求URL
-	 * @param array|false $params 携带的数组参数
-	 * @return response
+	 * 发送GET请求
+	 * 
+	 * @param string $url 请求URL 
+	 * @param array|false $params 请求参数,为空时为false
+	 * @return Response 响应对象
 	 */
 	public function get($url, $params = false)
 	{
@@ -26,11 +26,11 @@ class Client
 	}
 
 	/**
-	 * POST请求
-	 * @access public
+	 * 发送POST请求
+	 * 
 	 * @param string $url 请求URL
-	 * @param array|false $params 携带的数组参数
-	 * @return response
+	 * @param array|false $params 请求参数,为空时为false 
+	 * @return Response 响应对象
 	 */
 	public function post($url, $params = false)
 	{

@@ -3,7 +3,7 @@
         'name' => 'network/http',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '7014e2289c56effc7c0575055e02e0cf85d01dcf',
+        'reference' => '205c106f2f44fc74970e57ebdd07676a43901157',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'network/http' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '7014e2289c56effc7c0575055e02e0cf85d01dcf',
+            'reference' => '205c106f2f44fc74970e57ebdd07676a43901157',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

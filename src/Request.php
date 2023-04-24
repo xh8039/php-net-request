@@ -5,6 +5,9 @@ namespace network\http;
 trait Request
 {
 
+	/**
+	 * cURL资源
+	 */
 	private $ch;
 
 	/**
@@ -12,6 +15,7 @@ trait Request
 	 * @return array
 	 */
 	private $options = [
+		// 请求配置
 		'request' => [
 			'headers' => [
 				'Accept' => '*/*',
@@ -21,6 +25,7 @@ trait Request
 			],
 			'params' => []
 		],
+		// 配置信息
 		'options' => [
 			// 连接时间
 			'connect_time' => 3,
@@ -30,9 +35,9 @@ trait Request
 	];
 
 	/**
-	 * 设置配置
-	 * @param array $options 要设置的配置项
-	 * @return array
+	 * 构造函数,初始化请求配置
+	 * 
+	 * @param array $options 要设置的配置项  
 	 */
 	public function __construct($options = [])
 	{
@@ -42,6 +47,9 @@ trait Request
 		return $this;
 	}
 
+	/**
+	 * 初始化cURL请求
+	 */
 	private function init()
 	{
 		$headers_array = [];
@@ -70,14 +78,15 @@ trait Request
 	}
 
 	/**
-	 * 配置请求头部参数 支持通过数组传递
-	 * @access public
-	 * @param array $headers 要配置的请求头部参数
+	 * 设置请求头
+	 * 
+	 * @param string|array $name  请求头名称或数组
+	 * @param string $value 请求头值  
 	 * @return $this
 	 */
 	public function header($name, $value = false)
 	{
-		if (is_array($name)) {
+		if (is_array($name) && (!empty($name))) {
 			$this->options['request']['headers'] = array_merge($this->options['request']['headers'], $name);
 		} else {
 			$this->options['request']['headers'][$name] = $value;
@@ -86,15 +95,15 @@ trait Request
 	}
 
 	/**
-	 * 配置请求参数 支持通过数组传递
-	 * @access public
-	 * @param $name 参数名
-	 * @param $value 参数值
+	 * 设置请求参数
+	 * 
+	 * @param string|array $name  参数名称或数组 
+	 * @param string $value 参数值  
 	 * @return $this
 	 */
 	public function param($name, $value = false)
 	{
-		if (is_array($name)) {
+		if (is_array($name) && (!empty($name))) {
 			$this->options['request']['params'] = array_merge($this->options['request']['params'], $name);
 		} else {
 			$this->options['request']['params'][$name] = $value;
@@ -103,9 +112,9 @@ trait Request
 	}
 
 	/**
-	 * 配置发送请求时的Cookie
-	 * @access public
-	 * @param $value 参数值
+	 * 设置请求Cookie
+	 * 
+	 * @param string $value Cookie值  
 	 * @return $this
 	 */
 	public function cookie($value)
@@ -114,10 +123,10 @@ trait Request
 	}
 
 	/**
-	 * 处理请求
-	 * @access private
-	 * @param string $url 请求URL
-	 * @return response
+	 * 发送请求
+	 * 
+	 * @param string $url 请求URL  
+	 * @return Response 响应对象
 	 */
 	private function sendRequest($url)
 	{

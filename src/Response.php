@@ -4,18 +4,33 @@ namespace network\http;
 
 class Response
 {
+
+	/**
+	 * 响应内容
+	 * @var array 
+	 */
 	private $response;
 
+	/**
+	 * 响应头信息
+	 * @var array|null
+	 */
 	private $headers = null;
 
-	public function __construct($response)
+	/**
+	 * 构造函数,初始化响应内容
+	 * 
+	 * @param array $response 响应内容
+	 */
+	public function __construct(array $response)
 	{
 		$this->response = $response;
 	}
 
 	/**
 	 * 直接获取响应体内容
-	 * @return string
+	 *  
+	 * @return string 响应体字符串
 	 */
 	public function __toString()
 	{
@@ -23,8 +38,9 @@ class Response
 	}
 
 	/**
-	 * 直接获取响应体内容
-	 * @return string
+	 * 获取响应体内容
+	 * 
+	 * @return string 响应体字符串
 	 */
 	public function body()
 	{
@@ -33,7 +49,8 @@ class Response
 
 	/**
 	 * 获取响应状态码
-	 * @return integer
+	 *  
+	 * @return integer 响应状态码
 	 */
 	public function code()
 	{
@@ -41,34 +58,39 @@ class Response
 	}
 
 	/**
-	 * 获取指定响应头信息
-	 * @access public
-	 * @param $name 响应头名称
-	 * @return string
+	 * 获取响应头信息
+	 * 
+	 * @param string|null $name 响应头名称,为空则获取所有响应头
+	 * @return string|array|null 指定响应头值,或所有响应头数组,或空响应头null
 	 */
-	public function header($name)
+	public function header($name = null)
 	{
+		if (empty($name)) {
+			return $this->headers();
+		}
 		$headers = $this->headers();
 		$name = strtolower(trim($name));
 		return isset($headers[$name]) ? $headers[$name] : null;
 	}
 
 	/**
-	 * 获取数组形式的所有响应头信息
-	 * @return array
+	 * 获取所有响应头信息
+	 * 
+	 * @return array 响应头数组
 	 */
 	public function headers()
 	{
 		if (is_null($this->headers)) {
-			$this->headers = $this->explodeHeaders($this->response['headers']);
+			$this->headers = $this->_explodeHeaders($this->response['headers']);
 		}
 		return $this->headers;
 	}
 
 	/**
-	 * 将获取到的JSON数据转换为PHP数组
-	 * @access public
-	 * @return array|string
+	 * 将JSON响应体转换为PHP数组
+	 * 如果转换失败,返回原响应体字符串
+	 * 
+	 * @return array|string 数组或原始响应体
 	 */
 	public function toArray()
 	{
@@ -80,9 +102,10 @@ class Response
 	}
 
 	/**
-	 * 将获取到的JSON数据转换为PHP对象
-	 * @access public
-	 * @return object|string
+	 * 将JSON响应体转换为PHP对象
+	 * 如果转换失败,返回原响应体字符串
+	 * 
+	 * @return object|string 对象或原始响应体
 	 */
 	public function toObject()
 	{
@@ -93,10 +116,15 @@ class Response
 		return $this->body();
 	}
 
-	private function explodeHeaders(array $headers)
+	/**
+	 * 将字符串响应头转换为关联数组
+	 * 
+	 * @param array $headers 字符串响应头  
+	 * @return array 响应头数组
+	 */
+	private function _explodeHeaders(array $headers)
 	{
 		$headers_array = [];
-		// $headers[] = 'data : :aa:bb: ';
 		foreach ($headers as $value) {
 			if (strpos($value, ':')) {
 				$value = explode(':', $value, 2);

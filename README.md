@@ -1,80 +1,153 @@
-使用说明文档：[https://gitee.com/yh_IT/php_curl/wikis/pages](https://gitee.com/yh_IT/php_curl/wikis/pages)
+# 网络请求库使用文档  
 
-## 1. 安装
+## 安装
+
 使用Composer安装:
+
+```shell
+composer require network/http   
 ```
-composer require curl/curl
-```
-或者下载源码手动安装。
-## 2. 引入
+
+## 基本使用
+
+### 实例化Client
+
 ```php
-include 'Curl.php';
+$client = new network\http\Client();
 ```
-## 3. 创建Curl对象
+  
+### param()和header()方法
+
+可以调用param()方法添加URL参数,header()方法添加请求头。它们既支持单个设置,也支持批量设置:
+
 ```php
-$request = new Curl([
-    'option1' => 'value1',
-    'option2' => 'value2'
-]);
+// 单个设置
+$client->param('name', '易航');  
+$client->header('User-Agent', 'Mozilla/5.0');  
+
+// 批量设置  
+$client->param(['name' => '易航', 'age' => 25]);
+$client->header(['User-Agent' => 'Mozilla/5.0', 'Content-Type' => 'application/json']);
 ```
-可以传入可选选项数组设置CURL参数,如连接超时时间、代理等。
-## 4. 设置请求头
-```php 
-$request->header('header1', 'value1');
-$request->header('header2', 'value2');
-```
-## 5. 设置请求参数
-```php
-$request->param('param1', 'value1');
-$request->param('param2', 'value2'); 
-```
-## 6. 发送请求
-发送GET请求:
-```php
-$response = $request->get('http://example.com');
-```
-发送POST请求:
+
+### 发送GET请求
+
 ```php  
-$response = $request->post('http://example.com'); 
+$response = $client->get('http://example.com');
 ```
-## 7. 处理响应
-获取响应状态码:
+  
+可以传入请求头和查询参数:
+
 ```php
-$code = $response->code();
+$response = $client->get('http://example.com', ['name' => '易航'], ['Accept' => 'application/json']);
 ```
-获取指定响应头:
+
+### 发送POST请求
+
+```php  
+$response = $client->post('http://example.com', ['name' => '易航']);
+```
+  
+可以传入请求体、请求头:
+
 ```php
-$content_type = $response->header('Content-Type');
+$response = $client->post('http://example.com', ['name' => '易航'], ['Content-Type' => 'application/x-www-form-urlencoded']);
 ```
-获取所有响应头:
-```php 
-$headers = $response->headers();
-```
-获取JSON响应体 als 对象/数组:
+
+### 其他请求方法
+
+- delete(): 发送DELETE请求
+- put(): 发送PUT请求
+- patch(): 发送PATCH请求
+
+## 助手函数
+
+网络请求库提供以下助手函数:
+
+### post()
+
+发送POST请求。用法:
+
 ```php
-$data = $response->toObject();
-$data = $response->toArray();
+network\http\post($url, $params, $headers, $options)
+
+- $url: 请求URL
+- $params: 携带的参数,可以是数组或false
+- $headers: 自定义请求头,数组格式
+- $options: 配置信息,数组格式
+返回response对象。
 ```
-直接输出响应体:
+
+### get()
+
+发送GET请求。用法:
+
+```php
+network\http\get($url, $params, $headers, $options)  
+参数与post()方法相同。
+```
+
+### delete()
+
+发送DELETE请求。用法:
+
+```php
+network\http\delete($url, $params, $headers, $options)
+```
+
+参数与post()方法相同。  
+
+### put()
+
+发送PUT请求。用法:
+
+```php  
+network\http\put($url, $params, $headers, $options)  
+参数与post()方法相同。  
+```
+
+### patch()  
+
+发送PATCH请求。用法:
+
+```php  
+network\http\patch($url, $params, $headers, $options)
+参数与post()方法相同。
+```
+
+## 获取响应
+
+使用响应对象获取响应信息:
+
+```php
+$response = $client->get('http://example.com');
+```
+
+- `$response->code()`：获取响应状态码
+- `$response->header('name')`: 获取指定响应头
+- `$response->headers()`: 以数组形式获取所有响应头
+- `$response->body()`: 获取原始响应体字符串
+- `$response->toObject()`: 如果响应是JSON,转换为对象
+- `$response->toArray()`: 如果响应是JSON,转换为数组
+
+## 显示响应体
+
+可以直接输出响应体:
+
 ```php
 echo $response;
 ```
-## 8. 完整示例
+
+或者:
+
 ```php
-include 'Curl.php';
-
-$url = 'https://www.example.com';
-
-$request = new Curl();
-
-$request->header('User-Agent', 'Mozilla/5.0');
-
-$response = $request->get($url);
-
-echo $response->code();
-echo $response->header('Content-Type');
-
-$data = $response->toObject();
-
-echo $response;
+echo $response->body();
 ```
+
+## 错误与异常  
+
+请求过程中发生的curl错误或解析响应时发生的错误将抛出异常,使用try/catch进行捕获。
+
+我会持续更新文档,完整记录网络请求库的所有功能和用法。如果文档的任何部分不够详尽,请告知我。
+
+希望这个简洁实用的网络请求库和配套文档能为广大`PHP`开发者提供更多便
