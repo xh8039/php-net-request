@@ -1,16 +1,16 @@
 <?php
 
 /**
- * @package request\Curl
+ * @package request\Request
  * @author  易航
- * @version 2.1
- * @link    https://gitee.com/yh_IT/php_curl
+ * @version 2.2
+ * @link    https://gitee.com/yh-it/php-network-request
  *
  **/
 
 namespace request;
 
-class Curl
+class Request
 {
 	private $ch;
 
@@ -35,13 +35,6 @@ class Curl
 			'read_time' => 5
 		]
 	];
-
-	/**
-	 * 请求成功后响应内容
-	 * @access public
-	 * @return array
-	 */
-	public $response = [];
 
 	public function __construct($options = [])
 	{
@@ -79,7 +72,7 @@ class Curl
 	}
 
 	/**
-	 * 配置请求头部参数
+	 * 配置请求头部参数 支持通过数组传递
 	 * @access public
 	 * @param array $headers 要配置的请求头部参数
 	 * @return $this
@@ -95,7 +88,7 @@ class Curl
 	}
 
 	/**
-	 * 配置请求参数
+	 * 配置请求参数 支持通过数组传递
 	 * @access public
 	 * @param $name 参数名
 	 * @param $value 参数值
@@ -111,6 +104,12 @@ class Curl
 		return $this;
 	}
 
+	/**
+	 * 配置发送请求时的Cookie
+	 * @access public
+	 * @param $value 参数值
+	 * @return $this
+	 */
 	public function cookie($value)
 	{
 		return $this->header('cookie', $value);
@@ -120,6 +119,7 @@ class Curl
 	 * GET请求
 	 * @access public
 	 * @param string $url 请求URL
+	 * @param array|false $params 携带的数组参数
 	 * @return response
 	 */
 	public function get($url, $params = false)
@@ -137,6 +137,7 @@ class Curl
 	 * POST请求
 	 * @access public
 	 * @param string $url 请求URL
+	 * @param array|false $params 携带的数组参数
 	 * @return response
 	 */
 	public function post($url, $params = false)
