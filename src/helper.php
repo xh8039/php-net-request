@@ -11,7 +11,7 @@ namespace network\http;
  * @param array $options 配置信息
  * @return response
  */
-function post($url, $params = false, $headers = [], $options = [])
+function post(string $url, $params = false, $headers = [], $options = [])
 {
 	return (new Post($options))->send($url, $params, $headers);
 }
@@ -25,7 +25,7 @@ function post($url, $params = false, $headers = [], $options = [])
  * @param array $options 配置信息
  * @return response
  */
-function get($url, $params = false, $headers = [], $options = [])
+function get(string $url, $params = false, $headers = [], $options = [])
 {
 	return (new Get($options))->send($url, $params, $headers);
 }

@@ -26,11 +26,24 @@ class Response
 	/**
 	 * 构造函数,初始化响应内容
 	 * 
-	 * @param array $response 响应内容
+	 * @param $response_body 响应内容
 	 */
-	public function __construct(array $response)
+	public function __construct($http_code, $header_size, $response_body)
 	{
-		$this->response = $response;
+
+		$header = substr($response_body, 0, $header_size);
+		$headers = explode(PHP_EOL, $header);
+		// 过滤数组值两边的空格
+		$headers = array_map('trim', $headers);
+		// 过滤数组中的空值
+		$headers = array_filter($headers);
+		$body = substr($response_body, $header_size);
+		$this->response = [
+			'body' => $body,
+			'header' => $header,
+			'headers' => $headers,
+			'code' => $http_code
+		];
 	}
 
 	/**

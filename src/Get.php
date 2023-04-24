@@ -24,12 +24,12 @@ class Get extends Client
 	/**
 	 * 发送GET请求
 	 *  
-	 * @param string $url 请求URL
+	 * @param string|null $url 请求URL
 	 * @param array|false $params 请求参数,为空时为false
 	 * @param array $headers 自定义请求头
 	 * @return Response 响应对象 
 	 */
-	public function send($url, $params = false, $headers = [])
+	public function send($url = null, $params = false, $headers = [])
 	{
 		$this->header($headers);
 		return $this->get($url, $params);
