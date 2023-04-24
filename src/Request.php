@@ -2,6 +2,12 @@
 
 namespace network\http;
 
+/**
+ * @package network\http
+ * @author  易航
+ * @version dev
+ * @link    https://gitee.com/yh-it/php-http-request
+ */
 trait Request
 {
 
