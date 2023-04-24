@@ -110,6 +110,7 @@ trait Request
 	private function getFullUrl($url = null)
 	{
 		$url = empty($url) ? $this->options['request']['url'] : $url;
+		$this->url($url);
 		$url = empty($this->options['options']['base_url']) ? $url : ($this->options['options']['base_url'] . $url);
 		return $url;
 	}
