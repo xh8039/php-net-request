@@ -12,7 +12,7 @@ include 'Curl.php';
 ```
 ## 3. 创建Curl对象
 ```php
-$curl = new Curl([
+$request = new Curl([
     'option1' => 'value1',
     'option2' => 'value2'
 ]);
@@ -20,22 +20,22 @@ $curl = new Curl([
 可以传入可选选项数组设置CURL参数,如连接超时时间、代理等。
 ## 4. 设置请求头
 ```php 
-$curl->header('header1', 'value1');
-$curl->header('header2', 'value2');
+$request->header('header1', 'value1');
+$request->header('header2', 'value2');
 ```
 ## 5. 设置请求参数
 ```php
-$curl->param('param1', 'value1');
-$curl->param('param2', 'value2'); 
+$request->param('param1', 'value1');
+$request->param('param2', 'value2'); 
 ```
 ## 6. 发送请求
 发送GET请求:
 ```php
-$response = $curl->get('http://example.com');
+$response = $request->get('http://example.com');
 ```
 发送POST请求:
 ```php  
-$response = $curl->post('http://example.com'); 
+$response = $request->post('http://example.com'); 
 ```
 ## 7. 处理响应
 获取响应状态码:
@@ -65,11 +65,11 @@ include 'Curl.php';
 
 $url = 'https://www.example.com';
 
-$curl = new Curl();
+$request = new Curl();
 
-$curl->header('User-Agent', 'Mozilla/5.0');
+$request->header('User-Agent', 'Mozilla/5.0');
 
-$response = $curl->get($url);
+$response = $request->get($url);
 
 echo $response->code();
 echo $response->header('Content-Type');

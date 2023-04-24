@@ -1,24 +1,34 @@
 <?php
 
-require 'Curl.php';
+
+require __DIR__ . '/http/request/Options.php';
+require __DIR__ .  '/http/request/Method.php';
+require __DIR__ .  '/http/Request.php';
+require __DIR__ .  '/http/Get.php';
+require __DIR__ .  '/http/Post.php';
+require __DIR__ .  '/http/Response.php';
+require __DIR__ .  '/http/functions.php';
 
 $url = 'http://www.bri6.cn';
+$get = \network\http\get($url);
+echo($get);
+exit;
 
 // 设置一个30秒的连接超时时间和20秒的读取超时时间
-$curl = new request\Curl([
+$request = new \network\http\Request([
     'connect_time' => 30,
     'read_time' => 20
 ]);
 
 // 设置请求头
-$curl->header('User-Agent', 'Mozilla/5.0');
+$request->header('User-Agent', 'Mozilla/5.0');
 
 // 设置请求参数
-$curl->param('key1', 'value1');
-$curl->param('key2', 'value2');
+$request->param('key1', 'value1');
+$request->param('key2', 'value2');
 
 // 发送GET请求 
-$response = $curl->get($url);
+$response = $request->get($url);
 
 // 打印响应状态码
 echo $response->code();

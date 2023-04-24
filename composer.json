@@ -1,0 +1,24 @@
+{
+	"name": "network/request",
+	"description": "一款PHP网络请求库",
+	"type": "library",
+	"require": {
+        "php": ">=7.4"
+    },
+	"license": "Apache-2.0",
+	"autoload": {
+		"psr-4": {
+			"request\\": "src/"	
+		},
+		"files": [
+			"src/functions.php"
+		]
+	},
+	"authors": [
+        {
+            "name": "易航",
+            "email": "xh118039@qq.com"
+        }
+    ],
+	"minimum-stability": "dev"
+}
