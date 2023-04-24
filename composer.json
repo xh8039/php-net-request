@@ -1,6 +1,6 @@
 {
 	"name": "network/http",
-	"description": "一款基于PHP的HTTP网络请求库",
+	"description": "一款基于PHP的轻量级HTTP网络请求库",
 	"type": "library",
 	"require": {
         "php": ">=7.4"
