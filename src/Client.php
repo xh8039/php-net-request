@@ -22,7 +22,7 @@ class Client
 	 */
 	public function get($url = null, $params = false)
 	{
-		return $this->send('GET', $url, $params);
+		return $this->send(__FUNCTION__, $url, $params);
 	}
 
 	/**
@@ -34,6 +34,6 @@ class Client
 	 */
 	public function post($url = null, $params = false)
 	{
-		return $this->send('POST', $url, $params);
+		return $this->send(__FUNCTION__, $url, $params);
 	}
 }
