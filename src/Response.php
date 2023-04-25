@@ -30,7 +30,6 @@ class Response
 	 */
 	public function __construct($http_code, $header_size, $response_body)
 	{
-
 		$header = substr($response_body, 0, $header_size);
 		$headers = explode(PHP_EOL, $header);
 		// 过滤数组值两边的空格
