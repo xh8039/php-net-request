@@ -18,7 +18,7 @@
 
 使用Composer安装网络请求库:
 
-```shell
+```bash
 composer require network/http
 ```
 
