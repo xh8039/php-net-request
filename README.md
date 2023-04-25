@@ -14,11 +14,11 @@ echo $response; // 输出响应体
 
 该库的主要特性:
 
-- 支持主流的HTTP方法：GET、POST、HEAD、DELETE、PUT、PATCH 等。可以发送各种请求,获取不同的响应。
+- 支持主流的HTTP方法：GET、POST、HEAD、DELETE、PUT、PATCH 等。可以发送各种请求，获取不同的响应。
 - 支持URL参数、请求体、请求头、Cookie等设置。可以定制灵活的请求参数。
 - 发送请求体支持JSON、XML、文本等格式。支持的请求数据类型丰富。
-- 简单易用,代码量小巧轻量,使用方法灵活。接口简单明了,学习成本低。
-- 基于PHP原生curl扩展,性能高效稳定。利用curl实现,性能优秀。
+- 简单易用,代码量小巧轻量，使用方法灵活。接口简单明了,学习成本低。
+- 基于PHP原生curl扩展，性能高效稳定。利用curl实现,性能优秀。
 
 ## 安装
 
@@ -66,7 +66,7 @@ $response = $client->get('http://www.bri6.cn'); // 发送GET请求
 echo $response; // 输出响应体
 ```
 
-请求参数用于构造请求URL的参数,请求头用于定制客户端信息,发起GET请求后获取响应,并输出响应体。
+请求参数用于构造请求URL的参数,请求头用于定制客户端信息，发起GET请求后获取响应，并输出响应体。
 
 详情见 [基本使用页面](readme/基本使用.md)。
 
@@ -88,7 +88,7 @@ echo $response; // 输出响应体
 
 ## 其他
 
-另外,如果需要对请求库进行定制开发,可以继承Client类并重写send()方法:
+另外,如果需要对请求库进行定制开发，可以继承Client类并重写send()方法：
 
 ```php
 namespace network\http;
@@ -105,8 +105,8 @@ class CustomClient extends Client
 
 然后通过 `new CustomClient()` 使用定制的客户端。
 
-希望这个HTTP客户端库和使用文档能为您提供帮助!如果有任何问题请提Issue或Pull Request。
+希望这个HTTP客户端库和使用文档能为您提供帮助！如果有任何问题请提Issue或Pull Request。
 
-我会持续更新文档,完整记录轻HTTP请求库的所有功能和用法。如果文档的任何部分不够详尽,请提Issue告知我。
+我会持续更新文档，完整记录轻HTTP请求库的所有功能和用法。如果文档的任何部分不够详尽，请提Issue告知我。
 
-希望这个简洁实用的轻HTTP请求库和配套文档能为广大PHP开发者提供更多便捷!
+希望这个简洁实用的轻HTTP请求库和配套文档能为广大PHP开发者提供更多便捷！
