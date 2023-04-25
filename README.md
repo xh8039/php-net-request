@@ -19,7 +19,7 @@
 使用Composer安装网络请求库:
 
 ```bash
-composer require network/http
+composer require network/http:dev-master
 ```
 
 此命令将自动下载网络请求库并安装到您的项目中。
