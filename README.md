@@ -50,6 +50,27 @@ $client = new network\http\Client();
 
 详情见 [错误与异常页面](readme/错误与异常.md)。
 
+## 其他
+
+另外，如果需要对请求库进行定制开发,可以继承Client类并重写send()方法:
+
+```php
+namespace network\http;
+
+class CustomClient extends Client 
+{
+    public function send($url, $params, $headers)
+    {
+        // 定制发送请求的逻辑
+        // 调用parent::send($url, $params, $headers)发送请求
+    }
+}
+```
+
+然后通过 `new CustomClient()` 使用定制的客户端。
+
+希望这个HTTP客户端库和使用文档能为您提供帮助！如果有任何问题请让我知道。
+
 我会持续更新文档，完整记录轻HTTP请求库的所有功能和用法。如果文档的任何部分不够详尽，请告知我。
 
-希望这个简洁实用的轻HTTP请求库和配套文档能为广大 `PHP` 开发者提供更多便捷
+希望这个简洁实用的轻HTTP请求库和配套文档能为广大PHP开发者提供更多便捷
