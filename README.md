@@ -36,13 +36,7 @@ curl -sS https://getcomposer.org/installer | php
 composer require network/http:dev-master
 ```
 
-#### 3. 引入自动加载文件
-
-```php
-require 'vendor/autoload.php';
-```
-
-### 启用 Composer 自动加载
+#### 3. 启用 Composer 自动加载
 
 ```php
 require 'vendor/autoload.php';
