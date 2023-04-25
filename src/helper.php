@@ -13,7 +13,9 @@ namespace network\http;
  */
 function post(string $url, array $params = [], array $headers = [], array $options = [])
 {
-	return (new Client($options))->post($url, $params, $headers);
+	$client = new Client($options);
+	if (!empty($headers)) $client->header($headers);
+	return $client->post($url, $params);
 }
 
 /**
@@ -27,5 +29,14 @@ function post(string $url, array $params = [], array $headers = [], array $optio
  */
 function get(string $url, array $params = [], array $headers = [], array $options = [])
 {
-	return (new Client($options))->get($url, $params, $headers);
+	$client = new Client($options);
+	if (!empty($headers)) $client->header($headers);
+	return $client->get($url, $params);
+}
+
+
+function halt($arg)
+{
+	print_r($arg);
+	exit;
 }

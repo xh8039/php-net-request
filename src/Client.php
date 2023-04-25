@@ -13,36 +13,27 @@ class Client
 
 	use Request;
 
-	// public static function url($url)
-	// {
-	// 	return (new self)->url($url);
-	// }
-
 	/**
-	 * 发送GET请求
+	 * 发送GET请求 支持混合传参
 	 * 
-	 * @param string|null $url 请求URL 
-	 * @param array $params 请求参数
-	 * @param array $headers 自定义请求头信息
+	 * @param $param1 请求URL|请求参数
+	 * @param $param2 请求URL|请求参数
 	 * @return Response 响应对象
 	 */
-	public function get($url = null, array $params = [], array $headers = [])
+	public function get($param1 = null, $param2 = null)
 	{
-		if (!empty($headers)) $this->header($headers);
-		return $this->send(__FUNCTION__, $url, $params);
+		return $this->send(__FUNCTION__, $param1, $param2);
 	}
 
 	/**
-	 * 发送POST请求
+	 * 发送POST请求 支持混合传参
 	 * 
-	 * @param string|null $url 请求URL
-	 * @param array $params 请求参数
-	 * @param array $headers 自定义请求头信息
+	 * @param $param1 请求URL|请求参数
+	 * @param $param2 请求URL|请求参数
 	 * @return Response 响应对象
 	 */
-	public function post($url = null, array $params = [], array $headers = [])
+	public function post($param1 = null, $param2 = null)
 	{
-		if (!empty($headers)) $this->header($headers);
-		return $this->send(__FUNCTION__, $url, $params);
+		return $this->send(__FUNCTION__, $param1, $param2);
 	}
 }

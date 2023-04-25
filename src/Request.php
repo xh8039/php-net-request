@@ -38,8 +38,9 @@ trait Request
 	 */
 	public function __construct(array $options = [])
 	{
+		$this->options = new Options;
 		if ((!empty($options)) && is_array($options)) {
-			$this->options = (object) array_merge((array) new Options, (array) $options);
+			$this->options = (object) array_merge((array) $this->options, (array) $options);
 		}
 		$this->ch = curl_init();
 	}
@@ -101,8 +102,8 @@ trait Request
 		curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true); //返回原生的（Raw）输出
 		curl_setopt($this->ch, CURLOPT_HEADER, 1); //将头文件的信息作为数据流输出
 		curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->_initHeaders());  //设置请求头
-		//在发起连接前等待的时间，如果设置为0，则无限等待。
-		curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, $this->options->connect_time);
+		//在发起连接前等待的时间，如果设置为0，则无限等待
+		curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, $this->options->connectTime);
 		curl_setopt($this->ch, CURLOPT_TIMEOUT, intval($this->options->timeout)); //设置cURL允许执行的最长秒数
 		curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, $this->options->method);
 		curl_setopt($this->ch, CURLOPT_URL, $this->options->url);
@@ -126,7 +127,7 @@ trait Request
 	 */
 	public function baseUrl(string $base_url)
 	{
-		$this->options->base_url = $base_url;
+		$this->options->baseUrl = $base_url;
 		return $this;
 	}
 
@@ -137,7 +138,7 @@ trait Request
 	public function url(string $url)
 	{
 		$url = empty($url) ? $this->options->url : $url;
-		$this->options->url = empty($this->options->base_url) ? $url : ($this->options->base_url . $url);
+		$this->options->url = empty($this->options->baseUrl) ? $url : ($this->options->baseUrl . $url);
 		return $this;
 	}
 
@@ -186,43 +187,35 @@ trait Request
 		return $this->header('cookie', $value);
 	}
 
-	private function _isMethod($method)
+	private function _getSendArgType($value)
 	{
-		$method = strtoupper($method);
-		return in_array($method, ['GET', 'POST', 'PUT', 'HEAD', 'DELETE', 'OPTIONS', 'TRACE', 'CONNECT']);
+		if (is_array($value)) return 'params';
+		if (preg_match('/^http[s]?:\/\//i', $value)) return 'url';
+		if (in_array(strtoupper($value), ['GET', 'POST', 'PUT', 'HEAD', 'DELETE', 'OPTIONS', 'TRACE', 'CONNECT'])) return 'method';
 	}
 
-	private function _isUrl($url)
+	private function _initSend(array $args)
 	{
-		if (str_starts_with($url, 'http://') || str_starts_with($url, 'https://')) {
-			return true;
+		$data = [];
+		foreach ($args as $value) {
+			$type = $this->_getSendArgType($value);
+			$data[$type] = $value;
 		}
-		return false;
-	}
-
-	private function _initSend($param1, $param2, $param3)
-	{
-		$url = $this->_isUrl($param1) ?: $this->_isUrl($param2) ?: $this->_isUrl($param3);
-		$method = $this->_isMethod($param1) ?: $this->_isMethod($param2) ?: $this->_isMethod($param3);
-		$params = is_array($param1) ?: is_array($param2) ?: is_array($param3);
-		return (object) [
-			'url' => $url,
-			'method' => $method,
-			'params' => $params
-		];
+		return (object) $data;
 	}
 
 	/**
-	 * 发送请求
+	 * 发送请求 支持混合传参
 	 * 
-	 * @param $param1
-	 * @param $param2
-	 * @param $param3
+	 * @param $param1 请求方法|请求URL|请求参数
+	 * @param $param2 请求方法|请求URL|请求参数
+	 * @param $param3 请求方法|请求URL|请求参数
 	 * @return Response 响应对象
 	 */
 	public function send($param1 = null, $param2 = null, $param3 = null)
 	{
-		$info = $this->_initSend($param1, $param2, $param3);
+		$info = $this->_initSend([$param1, $param2, $param3]);
+
 		if (!empty($info->method)) $this->method($info->method);
 		if (!empty($info->url)) $this->url($info->url);
 		if ((!empty($info->params)) && is_array($info->params)) $this->param($info->params);
@@ -236,7 +229,7 @@ trait Request
 		curl_close($this->ch); // 关闭curl资源
 
 		$response = $this->response = new Response($http_code, $header_size, $response_body);
-		// curl_close($this->ch);
+
 		return $response;
 	}
 }
@@ -271,7 +264,7 @@ class Options
 	 * 连接时间 单位:秒
 	 * @return integer
 	 */
-	public $connect_time = 3;
+	public $connectTime = 3;
 
 	/**
 	 * 执行请求超时时间 单位:秒
@@ -283,7 +276,7 @@ class Options
 	 * 用于全局指定基础URL,会自动拼接到所有请求URL前面。一旦设置,客户端发出的所有请求URL都会基于这个基础URL
 	 * @return string
 	 */
-	public $base_url;
+	public $baseUrl;
 
 	/**
 	 * 请求方法
