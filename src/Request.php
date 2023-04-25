@@ -186,26 +186,54 @@ trait Request
 		return $this->header('cookie', $value);
 	}
 
+	private function _isMethod($method)
+	{
+		$method = strtoupper($method);
+		return in_array($method, ['GET', 'POST', 'PUT', 'HEAD', 'DELETE', 'OPTIONS', 'TRACE', 'CONNECT']);
+	}
+
+	private function _isUrl($url)
+	{
+		if (str_starts_with($url, 'http://') || str_starts_with($url, 'https://')) {
+			return true;
+		}
+		return false;
+	}
+
+	private function _initSend($param1, $param2, $param3)
+	{
+		$url = $this->_isUrl($param1) ?: $this->_isUrl($param2) ?: $this->_isUrl($param3);
+		$method = $this->_isMethod($param1) ?: $this->_isMethod($param2) ?: $this->_isMethod($param3);
+		$params = is_array($param1) ?: is_array($param2) ?: is_array($param3);
+		return (object) [
+			'url' => $url,
+			'method' => $method,
+			'params' => $params
+		];
+	}
+
 	/**
 	 * 发送请求
 	 * 
-	 * @param string $method 请求方法
-	 * @param string|null $url 请求URL
-	 * @param array|false $params 请求参数
+	 * @param $param1
+	 * @param $param2
+	 * @param $param3
 	 * @return Response 响应对象
 	 */
-	public function send(string|null $method = null, string|null $url = null, array|false $params = false)
+	public function send($param1 = null, $param2 = null, $param3 = null)
 	{
-		if (empty($method)) $this->method($method);
-		if (empty($url)) $this->url($url);
-		if (is_array($params) && (!empty($params))) $this->param($params);
+		$info = $this->_initSend($param1, $param2, $param3);
+		if (!empty($info->method)) $this->method($info->method);
+		if (!empty($info->url)) $this->url($info->url);
+		if ((!empty($info->params)) && is_array($info->params)) $this->param($info->params);
 
 		$this->_initialize();
 
 		$response_body = curl_exec($this->ch);
 		$http_code = curl_getinfo($this->ch, CURLINFO_HTTP_CODE);
 		$header_size = curl_getinfo($this->ch, CURLINFO_HEADER_SIZE);
-		curl_close($this->ch);
+
+		curl_close($this->ch); // 关闭curl资源
 
 		$response = $this->response = new Response($http_code, $header_size, $response_body);
 		// curl_close($this->ch);
@@ -240,19 +268,19 @@ class Options
 	public $url;
 
 	/**
-	 * 连接时间
+	 * 连接时间 单位:秒
 	 * @return integer
 	 */
 	public $connect_time = 3;
 
 	/**
-	 * 执行请求超时时间
+	 * 执行请求超时时间 单位:秒
 	 * @return integer
 	 */
 	public $timeout = 5;
 
 	/**
-	 * 用于全局指定基础URL,会自动拼接到所有请求URL前面。一旦设置,客户端发出的所有请求URL都会基于这个基础URL。
+	 * 用于全局指定基础URL,会自动拼接到所有请求URL前面。一旦设置,客户端发出的所有请求URL都会基于这个基础URL
 	 * @return string
 	 */
 	public $base_url;
