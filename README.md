@@ -2,14 +2,14 @@
 
 ## 简介
 
-轻HTTP请求库是一个简单轻量的PHP HTTP客户端,用于发送各种HTTP请求。它支持GET、POST、HEAD、DELETE、PUT、PATCH等方法,可以轻松发送JSON、XML等格式的数据。
+轻HTTP请求库是一个简单轻量的PHP HTTP客户端，用于发送各种HTTP请求。它支持GET、POST、HEAD、DELETE、PUT、PATCH等方法，可以轻松发送JSON、XML等格式的数据。
 
 该库的主要特性:
 
 - 支持主流的HTTP方法：GET、POST、HEAD、DELETE、PUT、PATCH 等
 - 支持URL参数、请求体、请求头、Cookie等设置  
 - 发送请求体支持JSON、XML、文本等格式  
-- 简单易用，代码量小巧轻量
+- 简单易用，代码量小巧轻量，使用方法灵活
 - 基于PHP原生curl扩展，性能高效稳定
 
 ## 安装
@@ -44,13 +44,23 @@ $client = new network\http\Client();
 
 ## 基本使用
 
+```php
+$client->param('name', '易航'); // 设置请求参数
+
+$client->header('User-Agent', 'Mozilla/5.0'); // 设置请求头
+
+$response = $client->get('http://www.bri6.cn'); // 发送GET请求
+
+echo $response; // 输出响应体
+```
+
 详情见 [基本使用页面](readme/基本使用.md)。
 
 ## 助手函数
 
 详情见 [助手函数页面](readme/助手函数.md)。
 
-## 获取响应
+## 获取响应信息
 
 详情见 [获取响应页面](readme/获取响应.md)。
 
