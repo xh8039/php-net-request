@@ -33,25 +33,25 @@ $client->header(['User-Agent' => 'Mozilla/5.0', 'Content-Type' => 'application/j
 ### 发送GET请求
 
 ```php  
-$response = $client->get('http://example.com');
+$response = $client->get('http://www.bri6.cn');
 ```
   
 可以传入请求头和查询参数:
 
 ```php
-$response = $client->get('http://example.com', ['name' => '易航'], ['Accept' => 'application/json']);
+$response = $client->get('http://www.bri6.cn', ['name' => '易航'], ['Accept' => 'application/json']);
 ```
 
 ### 发送POST请求
 
 ```php  
-$response = $client->post('http://example.com', ['name' => '易航']);
+$response = $client->post('http://www.bri6.cn', ['name' => '易航']);
 ```
   
 可以传入请求体、请求头:
 
 ```php
-$response = $client->post('http://example.com', ['name' => '易航'], ['Content-Type' => 'application/x-www-form-urlencoded']);
+$response = $client->post('http://www.bri6.cn', ['name' => '易航'], ['Content-Type' => 'application/x-www-form-urlencoded']);
 ```
 
 ### 其他请求方法
@@ -120,7 +120,7 @@ network\http\patch($url, $params, $headers, $options)
 使用响应对象获取响应信息:
 
 ```php
-$response = $client->get('http://example.com');
+$response = $client->get('http://www.bri6.cn');
 ```
 
 - `$response->code()`：获取响应状态码
