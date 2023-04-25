@@ -1,5 +1,7 @@
 # 轻HTTP请求库使用文档
 
+^ 觉得本项目不错的话可以帮忙点一下星星Star哦
+
 ## 简介
 
 轻HTTP请求库是一个简单轻量的PHP HTTP客户端，用于发送各种HTTP请求。它支持GET、POST、HEAD、DELETE、PUT、PATCH等方法，可以轻松发送JSON、XML等格式的数据。
