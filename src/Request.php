@@ -190,6 +190,7 @@ trait Request
 	private function _getSendArgType($value)
 	{
 		if (is_array($value)) return 'params';
+		if (!is_string($value)) return false;
 		if (preg_match('/^http[s]?:\/\//i', $value)) return 'url';
 		if (in_array(strtoupper($value), ['GET', 'POST', 'PUT', 'HEAD', 'DELETE', 'OPTIONS', 'TRACE', 'CONNECT'])) return 'method';
 	}
@@ -199,7 +200,7 @@ trait Request
 		$data = [];
 		foreach ($args as $value) {
 			$type = $this->_getSendArgType($value);
-			$data[$type] = $value;
+			if (is_string($type)) $data[$type] = $value;
 		}
 		return (object) $data;
 	}
