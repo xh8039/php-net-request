@@ -24,11 +24,16 @@ class Response
 	private $headers = null;
 
 	/**
+	 * 错误信息
+	 */
+	private $error;
+
+	/**
 	 * 构造函数,初始化响应内容
 	 * 
 	 * @param $response_body 响应内容
 	 */
-	public function __construct($http_code, $header_size, $response_body)
+	public function __construct($http_code, $header_size, $response_body, $error)
 	{
 		$header = substr($response_body, 0, $header_size);
 		$headers = explode(PHP_EOL, $header);
@@ -37,6 +42,7 @@ class Response
 		// 过滤数组中的空值
 		$headers = array_filter($headers);
 		$body = substr($response_body, $header_size);
+		$this->error = $error;
 		$this->response = [
 			'body' => $body,
 			'header' => $header,
@@ -132,6 +138,16 @@ class Response
 			return $object;
 		}
 		return $this->body();
+	}
+
+	/**
+	 * 如果请求错误，获取请求错误的信息
+	 * 
+	 * @return string
+	 */
+	public function error()
+	{
+		return $this->error;
 	}
 
 	/**

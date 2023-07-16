@@ -225,12 +225,13 @@ trait Request
 		$this->_initialize();
 
 		$response_body = curl_exec($this->ch);
+		$error = curl_error($this->ch);
 		$http_code = curl_getinfo($this->ch, CURLINFO_HTTP_CODE);
 		$header_size = curl_getinfo($this->ch, CURLINFO_HEADER_SIZE);
 
 		curl_close($this->ch); // 关闭curl资源
 
-		$response = $this->response = new Response($http_code, $header_size, $response_body);
+		$response = $this->response = new Response($http_code, $header_size, $response_body, $error);
 
 		return $response;
 	}
