@@ -63,6 +63,7 @@ trait Request
 			$value = trim($value);
 			$headers_array[$name] = $value;
 		}
+		$this->options->headers = $headers_array;
 		$headers = [];
 		foreach ($headers_array as $name => $value) {
 			$headers[] = $name . ': ' . $value;
