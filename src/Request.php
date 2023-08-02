@@ -59,7 +59,7 @@ trait Request
 				$name = $content[0];
 				$value = $content[1];
 			}
-			$name = strtolower(trim($name));
+			$name = $this->_headerNameUcfirst(strtolower(trim($name)));
 			$value = trim($value);
 			$headers_array[$name] = $value;
 		}
@@ -69,6 +69,16 @@ trait Request
 			$headers[] = $name . ': ' . $value;
 		}
 		return $headers;
+	}
+
+	private function _headerNameUcfirst($name)
+	{
+		$name = explode('-', $name);
+		foreach ($name as $key => $value) {
+			$name[$key] = ucfirst($value);
+		}
+		$name = implode('-', $name);
+		return $name;
 	}
 
 	/**
@@ -153,8 +163,9 @@ trait Request
 	 */
 	public function header($name, $value = null)
 	{
-		if (is_array($name) && (!empty($name))) {
-			$this->options->headers = array_merge($this->options->headers, $name);
+		if (is_null($value)) {
+			if (is_string($name)) $name = explode(PHP_EOL, $name);
+			if (is_array($name)) $this->options->headers = array_merge($this->options->headers, $name);
 		} else {
 			$this->options->headers[$name] = $value;
 		}

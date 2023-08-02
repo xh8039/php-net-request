@@ -116,11 +116,11 @@ class Response
 	 * 
 	 * @return array|string 数组或原始响应体
 	 */
-	public function toArray()
+	public function toArray(string $name = null)
 	{
 		$array = json_decode($this->response['body'], true);
 		if (is_array($array)) {
-			return $array;
+			return is_string($name) ? (isset($array[$name]) ? $array[$name] : null) : $array;
 		}
 		return $this->body();
 	}
@@ -131,11 +131,11 @@ class Response
 	 * 
 	 * @return object|string 对象或原始响应体
 	 */
-	public function toObject()
+	public function toObject(string $name = null)
 	{
 		$object = json_decode($this->response['body']);
 		if (is_object($object)) {
-			return $object;
+			return is_string($name) ? (isset($object->$name) ? $object->$name : null) : $object;
 		}
 		return $this->body();
 	}
