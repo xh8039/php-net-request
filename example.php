@@ -14,26 +14,6 @@ $response = network\http\post($url, ['name' => '易航'], ['User-Agent' => 'Mozi
 	'read_time' => 20
 ]);
 
-$response = (new network\http\Get([
-	'connect_time' => 30,
-	'read_time' => 20
-]))->send($url, ['name' => '易航'], ['User-Agent' => 'Mozilla/5.0', 'Accept' => '*']);
-
-$response = (new network\http\Get([
-	'connect_time' => 30,
-	'read_time' => 20
-]))->header(['User-Agent' => 'Mozilla/5.0', 'Accept' => '*'])->header('Accept-Language', 'zh-CN,zh;q=0.9')->param('name', '易航')->param(['qq' => '2136118039', 'email' => 'xh118039@qq.com'])->send($url);
-
-$response = (new network\http\Post([
-	'connect_time' => 30,
-	'read_time' => 20
-]))->send($url, ['name' => '易航'], ['User-Agent' => 'Mozilla/5.0', 'Accept' => '*']);
-
-$response = (new network\http\Post([
-	'connect_time' => 30,
-	'read_time' => 20
-]))->header(['User-Agent' => 'Mozilla/5.0', 'Accept' => '*'])->header('Accept-Language', 'zh-CN,zh;q=0.9')->param('name', '易航')->param(['qq' => '2136118039', 'email' => 'xh118039@qq.com'])->send($url);
-
 $response = (new network\http\Client([
 	'connect_time' => 30,
 	'read_time' => 20
@@ -47,7 +27,7 @@ $response = (new network\http\Client([
 // 打印响应状态码
 echo $response->code();
 
-// 打印指定响应头  
+// 打印指定响应头
 echo $response->header('Content-Type');
 
 // 以数组形式打印所有响应头
