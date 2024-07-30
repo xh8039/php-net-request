@@ -58,7 +58,11 @@ class Response
 	 */
 	public function __toString()
 	{
-		return $this->body();
+		$body = $this->body();
+		if (is_string($body)) {
+			return $body;
+		}
+		return '';
 	}
 
 	/**
