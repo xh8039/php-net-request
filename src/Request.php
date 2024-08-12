@@ -276,16 +276,16 @@ class Options
 	public $url;
 
 	/**
-	 * 连接时间 单位:秒
+	 * 在发起连接前等待的时间，如果设置为0，则无限等待，单位：秒
 	 * @return integer
 	 */
-	public $connectTime = 3;
+	public $connectTime = 0;
 
 	/**
 	 * 执行请求超时时间 单位:秒
 	 * @return integer
 	 */
-	public $timeout = 5;
+	public $timeout = 10;
 
 	/**
 	 * 用于全局指定基础URL,会自动拼接到所有请求URL前面。一旦设置,客户端发出的所有请求URL都会基于这个基础URL
