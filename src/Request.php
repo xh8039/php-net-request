@@ -22,6 +22,7 @@ trait Request
 	/**
 	 * 配置信息
 	 * @var object
+	 * @return Options
 	 */
 	public $options;
 
@@ -113,11 +114,15 @@ trait Request
 		curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true); //返回原生的（Raw）输出
 		curl_setopt($this->ch, CURLOPT_HEADER, 1); //将头文件的信息作为数据流输出
 		curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->_initHeaders());  //设置请求头
-		//在发起连接前等待的时间，如果设置为0，则无限等待
-		curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, $this->options->connectTime);
-		curl_setopt($this->ch, CURLOPT_TIMEOUT, intval($this->options->timeout)); //设置cURL允许执行的最长秒数
-		curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, $this->options->method);
-		curl_setopt($this->ch, CURLOPT_URL, $this->options->url);
+		curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, $this->options->connectTime); //在发起连接前等待的时间，如果设置为0，则无限等待
+		curl_setopt($this->ch, CURLOPT_TIMEOUT, intval($this->options->timeout)); //设置 cURL 允许执行的最长秒数
+		curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, $this->options->method); //请求方法
+		curl_setopt($this->ch, CURLOPT_URL, $this->options->url); //请求URL
+		curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, $this->options->followLocation); //是否跟随location
+		// 自定义 cUrl 配置
+		foreach ($this->options->options as $key => $value) {
+			curl_setopt($this->ch, $key, $value);
+		}
 	}
 
 	public function method(string $method)
@@ -251,9 +256,20 @@ trait Request
 
 class Options
 {
+	/**
+	 * 请求URL
+	 * @return string
+	 */
+	public $url;
 
 	/**
-	 * 请求头参数
+	 * 请求方法
+	 * @return string
+	 */
+	public string $method = 'GET';
+
+	/**
+	 * 请求头
 	 * @return array
 	 */
 	public array $headers = [
@@ -270,12 +286,6 @@ class Options
 	public array $params =  [];
 
 	/**
-	 * 请求URL
-	 * @return string
-	 */
-	public $url;
-
-	/**
 	 * 在发起连接前等待的时间，如果设置为0，则无限等待，单位：秒
 	 * @return integer
 	 */
@@ -288,14 +298,19 @@ class Options
 	public $timeout = 10;
 
 	/**
-	 * 用于全局指定基础URL,会自动拼接到所有请求URL前面。一旦设置,客户端发出的所有请求URL都会基于这个基础URL
+	 * 是否开启自动跟随重定向
+	 * @return bool
+	 */
+	public $followLocation = true;
+
+	/**
+	 * 用于全局指定基础URL，会自动拼接到所有请求URL前面。一旦设置，客户端发出的所有请求URL都会基于这个基础URL
 	 * @return string
 	 */
 	public $baseUrl;
 
 	/**
-	 * 请求方法
-	 * @return string
+	 * 自定义Curl配置
 	 */
-	public string $method = 'GET';
+	public $options = [];
 }
