@@ -120,9 +120,7 @@ trait Request
 		curl_setopt($this->ch, CURLOPT_URL, $this->options->url); //请求URL
 		curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, $this->options->followLocation); //是否跟随location
 		// 自定义 cUrl 配置
-		foreach ($this->options->options as $key => $value) {
-			curl_setopt($this->ch, $key, $value);
-		}
+		curl_setopt_array($this->ch,$this->options->options);
 	}
 
 	public function method(string $method)
