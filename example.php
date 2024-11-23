@@ -4,25 +4,13 @@ require __DIR__ . '/vendor/autoload.php';
 
 $url = 'http://www.bri6.cn';
 
-$response = network\http\get($url, ['name' => '易航'], ['User-Agent' => 'Mozilla/5.0', 'Accept' => '*'], [
-	'connect_time' => 30,
-	'read_time' => 20
-]);
+$response = network\http\get($url, ['name' => '易航'], ['User-Agent' => 'Mozilla/5.0', 'Accept' => '*'], ['timeout' => 30]);
 
-$response = network\http\post($url, ['name' => '易航'], ['User-Agent' => 'Mozilla/5.0', 'Accept' => '*'], [
-	'connect_time' => 30,
-	'read_time' => 20
-]);
+$response = network\http\post($url, ['name' => '易航'], ['User-Agent' => 'Mozilla/5.0', 'Accept' => '*'], ['timeout' => 30]);
 
-$response = (new network\http\Client([
-	'connect_time' => 30,
-	'read_time' => 20
-]))->header(['User-Agent' => 'Mozilla/5.0', 'Accept' => '*'])->header('Accept-Language', 'zh-CN,zh;q=0.9')->param('name', '易航')->param(['qq' => '2136118039', 'email' => 'xh118039@qq.com'])->get($url);
+$response = (new network\http\Client(['timeout' => 30]))->header(['User-Agent' => 'Mozilla/5.0', 'Accept' => '*'])->header('Accept-Language', 'zh-CN,zh;q=0.9')->param('name', '易航')->param(['qq' => '2136118039', 'email' => 'xh118039@qq.com'])->get($url);
 
-$response = (new network\http\Client([
-	'connect_time' => 30,
-	'read_time' => 20
-]))->header(['User-Agent' => 'Mozilla/5.0', 'Accept' => '*'])->header('Accept-Language', 'zh-CN,zh;q=0.9')->param('name', '易航')->param(['qq' => '2136118039', 'email' => 'xh118039@qq.com'])->post($url);
+$response = (new network\http\Client(['timeout' => 30]))->header(['User-Agent' => 'Mozilla/5.0', 'Accept' => '*'])->header('Accept-Language', 'zh-CN,zh;q=0.9')->param('name', '易航')->param(['qq' => '2136118039', 'email' => 'xh118039@qq.com'])->post($url);
 
 // 打印响应状态码
 echo $response->code();

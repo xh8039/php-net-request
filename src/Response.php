@@ -15,7 +15,7 @@ class Response
 	 * 响应内容
 	 * @var array
 	 */
-	private $response;
+	public $response;
 
 	/**
 	 * 响应头信息
