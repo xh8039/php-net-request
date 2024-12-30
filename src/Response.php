@@ -82,7 +82,7 @@ class Response
 	 */
 	public function code()
 	{
-		return (integer) trim($this->response['code']);
+		return (int) trim($this->response['code']);
 	}
 
 	/**
@@ -93,9 +93,7 @@ class Response
 	 */
 	public function header($name = null)
 	{
-		if (empty($name)) {
-			return $this->headers();
-		}
+		if (empty($name)) return $this->headers();
 		$headers = $this->headers();
 		$name = strtolower(trim($name));
 		return isset($headers[$name]) ? $headers[$name] : null;
